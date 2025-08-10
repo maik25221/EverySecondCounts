@@ -3,6 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Goal, CountdownTime } from '../lib/models';
 import { diffNowToISO, isOverdue, isUrgent, formatTimeLeft } from '../lib/time';
 import { classNames } from '../lib/utils';
+import { getCategoryConfig } from '../lib/categories';
+import { calculateGoalProgress } from '../lib/progress';
+import ProgressBar from './ProgressBar';
+import SubGoalManager from './SubGoalManager';
 
 interface GoalListItemProps {
   goal: Goal;
@@ -22,6 +26,10 @@ export default function GoalListItem({
   const { t } = useTranslation();
   const [timeLeft, setTimeLeft] = useState<CountdownTime | null>(null);
   const [showActions, setShowActions] = useState(false);
+  const [showSubGoals, setShowSubGoals] = useState(false);
+  
+  const categoryConfig = getCategoryConfig(goal.category || 'other');
+  const progress = calculateGoalProgress(goal);
 
   const isCompleted = !!goal.completedAtISO;
 
@@ -62,33 +70,109 @@ export default function GoalListItem({
     )}>
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
-          <h3 className={classNames(
-            'font-heading font-semibold text-lg mb-2',
-            isCompleted ? 'line-through text-gray-500' : 'text-gray-900'
-          )}>
-            {goal.title}
-          </h3>
-          
-          <div className="flex items-center space-x-2 text-sm">
-            <div className={classNames(
-              'flex items-center space-x-2 px-2 py-1 rounded-full',
-              getStatusColor()
-            )}>
-              <div className={classNames(
-                'w-2 h-2 rounded-full',
-                isCompleted 
-                  ? 'bg-green-500'
-                  : !timeLeft 
-                    ? 'bg-gray-400'
-                    : isOverdue(timeLeft)
-                      ? 'bg-red-500'
-                      : isUrgent(timeLeft)
-                        ? 'bg-amber-500'
-                        : 'bg-brand-500'
-              )} />
-              <span className="font-medium">{getStatusText()}</span>
+          <div className="flex items-start justify-between mb-2">
+            <div className="flex-1">
+              <div className="flex items-center space-x-2 mb-1">
+                <span className="text-xl">{categoryConfig.icon}</span>
+                <h3 className={classNames(
+                  'font-heading font-semibold text-lg',
+                  isCompleted ? 'line-through text-gray-500' : 'text-gray-900'
+                )}>
+                  {goal.title}
+                </h3>
+                {goal.priority && goal.priority !== 'medium' && (
+                  <span className={classNames(
+                    'px-2 py-1 rounded-full text-xs font-medium',
+                    goal.priority === 'high' 
+                      ? 'bg-red-100 text-red-700'
+                      : 'bg-blue-100 text-blue-700'
+                  )}>
+                    {t(`goals.priorities.${goal.priority}`)}
+                  </span>
+                )}
+              </div>
+              
+              {goal.description && (
+                <p className="text-sm text-gray-600 mb-2">
+                  {goal.description}
+                </p>
+              )}
+              
+              <div className="flex items-center space-x-3 text-sm mb-2">
+                <div className={classNames(
+                  'flex items-center space-x-2 px-2 py-1 rounded-full',
+                  getStatusColor()
+                )}>
+                  <div className={classNames(
+                    'w-2 h-2 rounded-full',
+                    isCompleted 
+                      ? 'bg-green-500'
+                      : !timeLeft 
+                        ? 'bg-gray-400'
+                        : isOverdue(timeLeft)
+                          ? 'bg-red-500'
+                          : isUrgent(timeLeft)
+                            ? 'bg-amber-500'
+                            : 'bg-brand-500'
+                  )} />
+                  <span className="font-medium">{getStatusText()}</span>
+                </div>
+                
+                <span className="text-gray-500">
+                  {t(categoryConfig.nameKey)}
+                </span>
+                
+                {goal.estimatedHours && (
+                  <span className="text-gray-500">
+                    {goal.estimatedHours}h estimadas
+                  </span>
+                )}
+              </div>
+              
+              {goal.tags && goal.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {goal.tags.map((tag, index) => (
+                    <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              
+              {goal.subGoals && goal.subGoals.length > 0 && (
+                <div className="space-y-2">
+                  <ProgressBar 
+                    progress={progress} 
+                    showText={false} 
+                    size="sm" 
+                  />
+                  
+                  {goal.subGoals.length > 0 && (
+                    <button
+                      onClick={() => setShowSubGoals(!showSubGoals)}
+                      className="flex items-center space-x-1 text-sm text-brand-600 hover:text-brand-700"
+                    >
+                      <span>{progress.completed}/{progress.total} pasos</span>
+                      <svg className={`w-4 h-4 transition-transform ${showSubGoals ? 'rotate-180' : ''}`} 
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
+          
+          {showSubGoals && goal.subGoals && goal.subGoals.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              <SubGoalManager 
+                goalId={goal.id}
+                subGoals={goal.subGoals}
+                disabled={isCompleted}
+              />
+            </div>
+          )}
         </div>
 
         <div className="relative ml-4">

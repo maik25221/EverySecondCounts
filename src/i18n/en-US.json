@@ -46,15 +46,35 @@
     "restore": "Restore",
     "title_label": "Milestone title",
     "title_placeholder": "E.g: Finish my project",
+    "description": "Description",
+    "descriptionPlaceholder": "Briefly describe your milestone...",
+    "category": "Category",
     "deadline": "Deadline",
     "deadlineLabel": "When do you want to complete it?",
+    "priority": "Priority",
+    "estimatedHours": "Estimated hours",
+    "estimatedHoursHint": "Approximate time it will take to complete this milestone",
+    "tags": "Tags",
+    "tagsPlaceholder": "work, personal, urgent",
+    "tagsHint": "Separate tags with commas",
+    "subGoals": "Sub-milestones",
+    "addSubGoalPlaceholder": "Add step...",
+    "basicInfo": "Basic information",
+    "details": "Details",
+    "subGoalsInfo": "Break down your milestone into smaller steps",
+    "subGoalsDescription": "Sub-milestones help you track detailed progress and maintain motivation with incremental achievements.",
     "completed": "Completed",
     "pending": "Pending",
     "overdue": "Overdue",
     "empty": "Add your first milestone",
     "emptySubtitle": "Milestones help you focus your energy on what really matters",
     "completedEmpty": "You haven't completed any milestones yet",
-    "completedEmptySubtitle": "Keep working on your goals!"
+    "completedEmptySubtitle": "Keep working on your goals!",
+    "priorities": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    }
   },
   "common": {
     "save": "Save",
@@ -72,7 +92,10 @@
     "days": "days",
     "hours": "hours",
     "minutes": "minutes",
-    "seconds": "seconds"
+    "seconds": "seconds",
+    "date": "Date",
+    "time": "Time",
+    "progress": "Progress"
   },
   "messages": {
     "goalCompleted": "Excellent! You've completed another milestone",
@@ -82,6 +105,9 @@
     "goalUpdated": "Milestone updated",
     "profileUpdated": "Profile updated",
     "deleteConfirm": "Are you sure you want to delete this milestone?",
+    "deleteSubGoalConfirm": "Delete this sub-milestone?",
+    "subGoalCompleted": "Sub-milestone completed!",
+    "subGoalRestored": "Sub-milestone restored",
     "positiveMessages": [
       "Make today count",
       "Small steps, big changes",
@@ -172,5 +198,12 @@
     "blue": "Ocean blue",
     "purple": "Royal purple",
     "rose": "Soft rose"
+  },
+  "categories": {
+    "work": "Work",
+    "personal": "Personal",
+    "health": "Health",
+    "learning": "Learning",
+    "other": "Other"
   }
 }

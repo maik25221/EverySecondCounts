@@ -46,15 +46,35 @@
     "restore": "Restaurar",
     "title_label": "Título del hito",
     "title_placeholder": "Ej: Terminar mi proyecto",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Describe brevemente tu hito...",
+    "category": "Categoría",
     "deadline": "Fecha límite",
     "deadlineLabel": "¿Cuándo quieres completarlo?",
+    "priority": "Prioridad",
+    "estimatedHours": "Horas estimadas",
+    "estimatedHoursHint": "Tiempo aproximado que te tomará completar este hito",
+    "tags": "Etiquetas",
+    "tagsPlaceholder": "trabajo, personal, urgente",
+    "tagsHint": "Separa las etiquetas con comas",
+    "subGoals": "Sub-hitos",
+    "addSubGoalPlaceholder": "Agregar paso...",
+    "basicInfo": "Información básica",
+    "details": "Detalles",
+    "subGoalsInfo": "Divide tu hito en pasos más pequeños",
+    "subGoalsDescription": "Los sub-hitos te ayudan a hacer un seguimiento detallado de tu progreso y mantener la motivación con logros incrementales.",
     "completed": "Completados",
     "pending": "Pendientes",
     "overdue": "Vencidos",
     "empty": "Añade tu primer hito",
     "emptySubtitle": "Los hitos te ayudan a enfocar tu energía en lo que realmente importa",
     "completedEmpty": "Aún no has completado ningún hito",
-    "completedEmptySubtitle": "¡Sigue trabajando en tus metas!"
+    "completedEmptySubtitle": "¡Sigue trabajando en tus metas!",
+    "priorities": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    }
   },
   "common": {
     "save": "Guardar",
@@ -72,7 +92,10 @@
     "days": "días",
     "hours": "horas",
     "minutes": "minutos",
-    "seconds": "segundos"
+    "seconds": "segundos",
+    "date": "Fecha",
+    "time": "Hora",
+    "progress": "Progreso"
   },
   "messages": {
     "goalCompleted": "¡Excelente! Has completado un hito más",
@@ -82,6 +105,9 @@
     "goalUpdated": "Hito actualizado",
     "profileUpdated": "Perfil actualizado",
     "deleteConfirm": "¿Estás seguro de que quieres eliminar este hito?",
+    "deleteSubGoalConfirm": "¿Eliminar este sub-hito?",
+    "subGoalCompleted": "¡Sub-hito completado!",
+    "subGoalRestored": "Sub-hito restaurado",
     "positiveMessages": [
       "Haz que hoy cuente",
       "Pequeños pasos, grandes cambios",
@@ -172,5 +198,12 @@
     "blue": "Azul océano",
     "purple": "Púrpura real",
     "rose": "Rosa suave"
+  },
+  "categories": {
+    "work": "Trabajo",
+    "personal": "Personal",
+    "health": "Salud",
+    "learning": "Aprendizaje",
+    "other": "Otros"
   }
 }

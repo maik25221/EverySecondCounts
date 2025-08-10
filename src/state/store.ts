@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { DateTime } from 'luxon';
-import { AppState, UserProfile, Goal } from '../lib/models';
+import { AppState, UserProfile, Goal, SubGoal } from '../lib/models';
+import { migrateGoalsArray } from '../lib/migration';
 import { generateId } from '../lib/utils';
 import { loadFromStorage, saveToStorage } from '../lib/storage';
 import { applyTheme, getThemeById, setBackgroundImage } from '../lib/themes';
@@ -19,8 +20,16 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
   
   addGoal: (goal: Goal) => {
+    const newGoal = {
+      ...goal,
+      id: generateId(),
+      subGoals: goal.subGoals || [],
+      reminder: goal.reminder || { enabled: false, frequency: 'none' },
+      category: goal.category || 'other',
+      priority: goal.priority || 'medium'
+    };
     set(state => ({
-      goals: [...state.goals, { ...goal, id: generateId() }],
+      goals: [...state.goals, newGoal],
     }));
     get().saveToStorage();
   },
@@ -64,6 +73,64 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().saveToStorage();
   },
 
+  // Sub-goals actions
+  addSubGoal: (goalId: string, subGoal: SubGoal) => {
+    set(state => ({
+      goals: state.goals.map(goal =>
+        goal.id === goalId
+          ? { ...goal, subGoals: [...goal.subGoals, subGoal] }
+          : goal
+      ),
+    }));
+    get().saveToStorage();
+  },
+
+  updateSubGoal: (goalId: string, subGoalId: string, updates: Partial<SubGoal>) => {
+    set(state => ({
+      goals: state.goals.map(goal =>
+        goal.id === goalId
+          ? {
+              ...goal,
+              subGoals: goal.subGoals.map(sub =>
+                sub.id === subGoalId ? { ...sub, ...updates } : sub
+              )
+            }
+          : goal
+      ),
+    }));
+    get().saveToStorage();
+  },
+
+  completeSubGoal: (goalId: string, subGoalId: string) => {
+    const now = DateTime.local().toISO();
+    set(state => ({
+      goals: state.goals.map(goal =>
+        goal.id === goalId
+          ? {
+              ...goal,
+              subGoals: goal.subGoals.map(sub =>
+                sub.id === subGoalId 
+                  ? { ...sub, completed: true, completedAtISO: now }
+                  : sub
+              )
+            }
+          : goal
+      ),
+    }));
+    get().saveToStorage();
+  },
+
+  deleteSubGoal: (goalId: string, subGoalId: string) => {
+    set(state => ({
+      goals: state.goals.map(goal =>
+        goal.id === goalId
+          ? { ...goal, subGoals: goal.subGoals.filter(sub => sub.id !== subGoalId) }
+          : goal
+      ),
+    }));
+    get().saveToStorage();
+  },
+
   setTheme: (themeId: string) => {
     set(state => ({
       settings: { ...state.settings, themeId },
@@ -84,9 +151,13 @@ export const useAppStore = create<AppState>((set, get) => ({
   loadFromStorage: () => {
     const data = loadFromStorage();
     const settings = data.settings || { themeId: 'turquoise', backgroundImage: undefined };
+    
+    // Migrate goals if needed
+    const migratedGoals = data.goals ? migrateGoalsArray(data.goals) : [];
+    
     set({
       profile: data.profile,
-      goals: data.goals,
+      goals: migratedGoals,
       settings,
     });
     

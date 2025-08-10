@@ -1,5 +1,23 @@
 export type Sex = 'male' | 'female';
 
+export type GoalCategory = 'work' | 'personal' | 'health' | 'learning' | 'other';
+
+export type ReminderFrequency = 'none' | 'daily' | 'weekly' | 'custom';
+
+export interface SubGoal {
+  id: string;
+  title: string;
+  completed: boolean;
+  completedAtISO?: string;
+}
+
+export interface GoalReminder {
+  enabled: boolean;
+  frequency: ReminderFrequency;
+  customDays?: number; // For custom frequency
+  lastNotified?: string;
+}
+
 export interface UserProfile {
   birthDateISO: string;
   sex: Sex;
@@ -10,8 +28,16 @@ export interface UserProfile {
 export interface Goal {
   id: string;
   title: string;
+  description?: string;
+  category: GoalCategory;
   deadlineISO: string;
   completedAtISO?: string | null;
+  subGoals: SubGoal[];
+  reminder: GoalReminder;
+  priority: 'low' | 'medium' | 'high';
+  tags?: string[];
+  estimatedHours?: number;
+  actualHours?: number;
 }
 
 export interface AppState {
@@ -25,6 +51,11 @@ export interface AppState {
   completeGoal(id: string): void;
   restoreGoal(id: string): void;
   deleteGoal(id: string): void;
+  // Sub-goals actions
+  addSubGoal(goalId: string, subGoal: SubGoal): void;
+  updateSubGoal(goalId: string, subGoalId: string, updates: Partial<SubGoal>): void;
+  completeSubGoal(goalId: string, subGoalId: string): void;
+  deleteSubGoal(goalId: string, subGoalId: string): void;
   // Settings actions
   setTheme(themeId: string): void;
   setBackgroundImage(imageUrl: string): void;
