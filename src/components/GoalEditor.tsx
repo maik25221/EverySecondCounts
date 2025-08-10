@@ -6,6 +6,8 @@ import { createDeadlineISO } from '../lib/life';
 import { DateTime } from 'luxon';
 import CategorySelector from './CategorySelector';
 import SubGoalManager from './SubGoalManager';
+import WorkSessionLogger from './WorkSessionLogger';
+import TimeAnalysisCard from './TimeAnalysisCard';
 import { generateSubGoalId } from '../lib/progress';
 
 interface GoalEditorProps {
@@ -28,7 +30,7 @@ export default function GoalEditor({ goal, isOpen, onSave, onCancel }: GoalEdito
     tags: '',
   });
   const [subGoals, setSubGoals] = useState<SubGoal[]>([]);
-  const [activeTab, setActiveTab] = useState<'basic' | 'details' | 'subgoals'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'details' | 'subgoals' | 'time'>('basic');
 
   const isEditing = !!goal;
 
@@ -137,7 +139,8 @@ export default function GoalEditor({ goal, isOpen, onSave, onCancel }: GoalEdito
             {[
               { id: 'basic', label: t('goals.basicInfo') },
               { id: 'details', label: t('goals.details') },
-              { id: 'subgoals', label: t('goals.subGoals') }
+              { id: 'subgoals', label: t('goals.subGoals') },
+              ...(isEditing ? [{ id: 'time', label: t('goals.timeTracking') }] : [])
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -153,6 +156,11 @@ export default function GoalEditor({ goal, isOpen, onSave, onCancel }: GoalEdito
                 {tab.id === 'subgoals' && subGoals.length > 0 && (
                   <span className="ml-1 text-xs bg-brand-100 text-brand-600 px-1.5 py-0.5 rounded-full">
                     {subGoals.length}
+                  </span>
+                )}
+                {tab.id === 'time' && goal?.workSessions && goal.workSessions.length > 0 && (
+                  <span className="ml-1 text-xs bg-brand-100 text-brand-600 px-1.5 py-0.5 rounded-full">
+                    {goal.workSessions.length}
                   </span>
                 )}
               </button>
@@ -391,6 +399,29 @@ export default function GoalEditor({ goal, isOpen, onSave, onCancel }: GoalEdito
                     </button>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {activeTab === 'time' && isEditing && goal && (
+              <div className="space-y-4">
+                <div className="bg-amber-50 p-4 rounded-lg">
+                  <h4 className="font-medium text-amber-900 mb-2">
+                    {t('goals.timeTrackingInfo')}
+                  </h4>
+                  <p className="text-sm text-amber-700">
+                    {t('goals.timeTrackingDescription')}
+                  </p>
+                </div>
+                
+                {goal.estimatedHours && (
+                  <TimeAnalysisCard goal={goal} />
+                )}
+                
+                <WorkSessionLogger 
+                  goalId={goal.id}
+                  workSessions={goal.workSessions || []}
+                  disabled={!!goal.completedAtISO}
+                />
               </div>
             )}
           </div>

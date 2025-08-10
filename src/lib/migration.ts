@@ -1,4 +1,5 @@
 import { Goal } from './models';
+import { DateTime } from 'luxon';
 
 export function migrateGoalToV2(oldGoal: any): Goal {
   // Handle migration from old goal format to new format
@@ -17,7 +18,8 @@ export function migrateGoalToV2(oldGoal: any): Goal {
     priority: 'medium',
     tags: undefined,
     estimatedHours: undefined,
-    actualHours: undefined
+    workSessions: [],
+    createdAt: DateTime.local().toISO()
   };
 
   return migratedGoal;
@@ -29,7 +31,8 @@ export function needsMigration(goal: any): boolean {
     typeof goal.category === 'undefined' ||
     typeof goal.subGoals === 'undefined' ||
     typeof goal.reminder === 'undefined' ||
-    typeof goal.priority === 'undefined'
+    typeof goal.priority === 'undefined' ||
+    typeof goal.workSessions === 'undefined'
   );
 }
 

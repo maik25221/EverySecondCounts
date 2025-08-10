@@ -5,8 +5,10 @@ import { diffNowToISO, isOverdue, isUrgent, formatTimeLeft } from '../lib/time';
 import { classNames } from '../lib/utils';
 import { getCategoryConfig } from '../lib/categories';
 import { calculateGoalProgress } from '../lib/progress';
+import { calculateTimeAnalysis, formatHours } from '../lib/timeTracking';
 import ProgressBar from './ProgressBar';
 import SubGoalManager from './SubGoalManager';
+import TimeAnalysisCard from './TimeAnalysisCard';
 
 interface GoalListItemProps {
   goal: Goal;
@@ -30,6 +32,7 @@ export default function GoalListItem({
   
   const categoryConfig = getCategoryConfig(goal.category || 'other');
   const progress = calculateGoalProgress(goal);
+  const timeAnalysis = calculateTimeAnalysis(goal);
 
   const isCompleted = !!goal.completedAtISO;
 
@@ -124,7 +127,7 @@ export default function GoalListItem({
                 
                 {goal.estimatedHours && (
                   <span className="text-gray-500">
-                    {goal.estimatedHours}h estimadas
+                    {formatHours(timeAnalysis.totalWorkedHours)}/{formatHours(goal.estimatedHours)}
                   </span>
                 )}
               </div>

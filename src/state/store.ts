@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { DateTime } from 'luxon';
-import { AppState, UserProfile, Goal, SubGoal } from '../lib/models';
+import { AppState, UserProfile, Goal, SubGoal, WorkSession } from '../lib/models';
 import { migrateGoalsArray } from '../lib/migration';
 import { generateId } from '../lib/utils';
 import { loadFromStorage, saveToStorage } from '../lib/storage';
@@ -26,7 +26,9 @@ export const useAppStore = create<AppState>((set, get) => ({
       subGoals: goal.subGoals || [],
       reminder: goal.reminder || { enabled: false, frequency: 'none' },
       category: goal.category || 'other',
-      priority: goal.priority || 'medium'
+      priority: goal.priority || 'medium',
+      workSessions: goal.workSessions || [],
+      createdAt: DateTime.local().toISO()
     };
     set(state => ({
       goals: [...state.goals, newGoal],
@@ -125,6 +127,45 @@ export const useAppStore = create<AppState>((set, get) => ({
       goals: state.goals.map(goal =>
         goal.id === goalId
           ? { ...goal, subGoals: goal.subGoals.filter(sub => sub.id !== subGoalId) }
+          : goal
+      ),
+    }));
+    get().saveToStorage();
+  },
+
+  // Work sessions actions
+  addWorkSession: (goalId: string, workSession: WorkSession) => {
+    set(state => ({
+      goals: state.goals.map(goal =>
+        goal.id === goalId
+          ? { ...goal, workSessions: [...(goal.workSessions || []), workSession] }
+          : goal
+      ),
+    }));
+    get().saveToStorage();
+  },
+
+  updateWorkSession: (goalId: string, sessionId: string, updates: Partial<WorkSession>) => {
+    set(state => ({
+      goals: state.goals.map(goal =>
+        goal.id === goalId
+          ? {
+              ...goal,
+              workSessions: (goal.workSessions || []).map(session =>
+                session.id === sessionId ? { ...session, ...updates } : session
+              )
+            }
+          : goal
+      ),
+    }));
+    get().saveToStorage();
+  },
+
+  deleteWorkSession: (goalId: string, sessionId: string) => {
+    set(state => ({
+      goals: state.goals.map(goal =>
+        goal.id === goalId
+          ? { ...goal, workSessions: (goal.workSessions || []).filter(session => session.id !== sessionId) }
           : goal
       ),
     }));

@@ -18,6 +18,14 @@ export interface GoalReminder {
   lastNotified?: string;
 }
 
+export interface WorkSession {
+  id: string;
+  date: string; // ISO date string
+  hours: number;
+  description?: string;
+  createdAt: string; // ISO datetime
+}
+
 export interface UserProfile {
   birthDateISO: string;
   sex: Sex;
@@ -37,7 +45,8 @@ export interface Goal {
   priority: 'low' | 'medium' | 'high';
   tags?: string[];
   estimatedHours?: number;
-  actualHours?: number;
+  workSessions: WorkSession[];
+  createdAt?: string;
 }
 
 export interface AppState {
@@ -56,6 +65,10 @@ export interface AppState {
   updateSubGoal(goalId: string, subGoalId: string, updates: Partial<SubGoal>): void;
   completeSubGoal(goalId: string, subGoalId: string): void;
   deleteSubGoal(goalId: string, subGoalId: string): void;
+  // Work sessions actions
+  addWorkSession(goalId: string, workSession: WorkSession): void;
+  updateWorkSession(goalId: string, sessionId: string, updates: Partial<WorkSession>): void;
+  deleteWorkSession(goalId: string, sessionId: string): void;
   // Settings actions
   setTheme(themeId: string): void;
   setBackgroundImage(imageUrl: string): void;
