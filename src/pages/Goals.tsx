@@ -7,7 +7,11 @@ import GoalEditor from '../components/GoalEditor';
 import PositiveToast from '../components/PositiveToast';
 import ConfettiTrigger from '../components/ConfettiTrigger';
 
-export default function Goals() {
+interface GoalsProps {
+  initialTab?: 'pending' | 'completed';
+}
+
+export default function Goals({ initialTab = 'pending' }: GoalsProps) {
   const { t } = useTranslation();
   const goals = useGoals();
   const { addGoal, updateGoal, completeGoal, restoreGoal, deleteGoal } = useAppStore();
@@ -81,6 +85,7 @@ export default function Goals() {
 
       <GoalList
         goals={goals}
+        initialTab={initialTab}
         onEdit={handleEdit}
         onComplete={handleComplete}
         onRestore={handleRestore}

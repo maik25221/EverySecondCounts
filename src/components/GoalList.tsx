@@ -7,6 +7,7 @@ import EmptyState from './EmptyState';
 
 interface GoalListProps {
   goals: Goal[];
+  initialTab?: 'pending' | 'completed';
   onEdit: (goal: Goal) => void;
   onComplete: (id: string) => void;
   onRestore: (id: string) => void;
@@ -16,6 +17,7 @@ interface GoalListProps {
 
 export default function GoalList({
   goals,
+  initialTab = 'pending',
   onEdit,
   onComplete,
   onRestore,
@@ -23,7 +25,7 @@ export default function GoalList({
   onCreateNew,
 }: GoalListProps) {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
+  const [activeTab, setActiveTab] = useState<'pending' | 'completed'>(initialTab);
 
   const { pendingGoals, completedGoals } = useMemo(() => {
     const pending = goals.filter(goal => !goal.completedAtISO);

@@ -13,6 +13,7 @@ type Page = 'home' | 'goals' | 'settings' | 'about';
 export default function App() {
   const hasProfile = useHasProfile();
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [goalsTab, setGoalsTab] = useState<'pending' | 'completed'>('pending');
   const [isOnboardingComplete, setIsOnboardingComplete] = useState(false);
 
   useEffect(() => {
@@ -24,8 +25,13 @@ export default function App() {
     setCurrentPage('home');
   };
 
-  const handleNavigate = (page: Page) => {
+  const handleNavigate = (page: Page, tab?: 'completed') => {
     setCurrentPage(page);
+    if (page === 'goals' && tab === 'completed') {
+      setGoalsTab('completed');
+    } else if (page === 'goals') {
+      setGoalsTab('pending');
+    }
   };
 
   if (!isOnboardingComplete) {
@@ -37,7 +43,7 @@ export default function App() {
       case 'home':
         return <Home onNavigate={handleNavigate} />;
       case 'goals':
-        return <Goals />;
+        return <Goals initialTab={goalsTab} />;
       case 'settings':
         return <Settings />;
       case 'about':

@@ -3,7 +3,7 @@ import { useProfile } from '../state/store';
 import LifeCountdownCard from '../components/LifeCountdownCard';
 
 interface HomeProps {
-  onNavigate: (page: 'goals') => void;
+  onNavigate: (page: 'goals', tab?: 'completed') => void;
 }
 
 export default function Home({ onNavigate }: HomeProps) {
@@ -58,7 +58,7 @@ export default function Home({ onNavigate }: HomeProps) {
         </button>
 
         <button
-          onClick={() => onNavigate('goals')}
+          onClick={() => onNavigate('goals', 'completed')}
           className="card bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200 hover:from-amber-100 hover:to-orange-100 transition-all cursor-pointer w-full text-left"
         >
           <div className="flex items-center space-x-4">
