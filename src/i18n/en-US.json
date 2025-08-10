@@ -8,7 +8,14 @@
   "home": {
     "title": "Your time to live",
     "subtitle": "Make today count",
-    "timeLeft": "Time left"
+    "timeLeft": "Time left",
+    "greeting": "Hello! 👋",
+    "tagline": "Every second is an opportunity to do something extraordinary",
+    "defineGoalsTitle": "Define your milestones",
+    "defineGoalsSubtitle": "Create meaningful goals and watch how every second brings you closer to them",
+    "celebrateTitle": "Celebrate each achievement",
+    "celebrateSubtitle": "Acknowledge your progress and maintain a positive perspective on time",
+    "quote": "Time you enjoy wasting, is not wasted time"
   },
   "onboarding": {
     "title": "Let's set everything up",

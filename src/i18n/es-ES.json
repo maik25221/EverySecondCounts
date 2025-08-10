@@ -8,7 +8,14 @@
   "home": {
     "title": "Tu tiempo por vivir",
     "subtitle": "Haz que hoy cuente",
-    "timeLeft": "Tiempo restante"
+    "timeLeft": "Tiempo restante",
+    "greeting": "¡Hola! 👋",
+    "tagline": "Cada segundo es una oportunidad para hacer algo extraordinario",
+    "defineGoalsTitle": "Define tus hitos",
+    "defineGoalsSubtitle": "Crea metas significativas y observa cómo cada segundo te acerca a ellas",
+    "celebrateTitle": "Celebra cada logro",
+    "celebrateSubtitle": "Reconoce tus avances y mantén una perspectiva positiva del tiempo",
+    "quote": "El tiempo que disfrutas perdiendo, no es tiempo perdido"
   },
   "onboarding": {
     "title": "Pongamos todo a punto",
